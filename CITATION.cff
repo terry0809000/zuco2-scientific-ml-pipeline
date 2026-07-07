@@ -6,7 +6,7 @@ authors:
     given-names: Tianyi
 repository-code: https://github.com/terry0809000/zuco2-scientific-ml-pipeline
 license: MIT
-version: 0.2.0
+version: 0.2.1
 date-released: 2026-07-08
 keywords:
   - ZuCo
