@@ -5,6 +5,7 @@ authors:
   - family-names: Yu
     given-names: Tianyi
 repository-code: https://github.com/terry0809000/zuco2-scientific-ml-pipeline
+doi: 10.5281/zenodo.21251548
 license: MIT
 version: 0.2.1
 date-released: 2026-07-08

@@ -1,5 +1,7 @@
 # ZuCo 2.0 Scientific ML Pipeline
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21251547.svg)](https://doi.org/10.5281/zenodo.21251547)
+
 Runnable Python package for word-level ZuCo 2.0 eye-tracking analysis.
 
 The project extracts ZuCo MATLAB/HDF5 `.mat` files, builds lexical and early-fixation features, and evaluates grouped machine-learning baselines for predicting high late word-level processing load. The repository is organized as reusable research software rather than as a single embedded notebook.
@@ -95,3 +97,7 @@ python -m py_compile src/zuco2_pipeline/*.py scripts/run_pipeline.py
 ## License
 
 Code and documentation in this repository are released under the MIT License. Dataset terms remain governed by the ZuCo data providers.
+
+## Archive
+
+The repository is archived on Zenodo. Cite the latest archived software record with the concept DOI `10.5281/zenodo.21251547`; the `v0.2.1` release DOI is `10.5281/zenodo.21251548`.
