@@ -1,0 +1,42 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install validation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install nbformat pyyaml
+      - name: Validate notebook and metadata
+        run: |
+          python - <<'PY'
+          import json
+          import nbformat
+          import yaml
+          from nbformat.validator import validate
+
+          notebook = nbformat.read("notebooks/01_zuco2_scientific_ml_pipeline.ipynb", as_version=4)
+          validate(notebook)
+
+          with open("environment.yml", "r", encoding="utf-8") as handle:
+              yaml.safe_load(handle)
+          PY
+      - name: Regenerate extracted script
+        run: |
+          python scripts/extract_notebook_code.py
+          git diff --exit-code scripts/zuco2_pipeline.py
+      - name: Syntax-check scripts
+        run: |
+          python -m py_compile scripts/extract_notebook_code.py scripts/zuco2_pipeline.py
+      - name: Check forbidden tracked artifacts
+        run: |
+          ! git ls-files | grep -E '(^|/)(data|outputs)/.*\.(mat|h5|hdf5|csv|tsv|parquet|pkl|joblib|pickle|png|jpg|jpeg|pdf|zip|tar|gz)$|\.mat$|\.h5$|\.hdf5$'

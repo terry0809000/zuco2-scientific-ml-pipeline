@@ -1,0 +1,17 @@
+name: zuco2-scientific-ml-pipeline
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - h5py
+  - requests
+  - pyyaml
+  - pip
+  - pip:
+      - nbformat>=5.9
+      - jupyter>=1.0

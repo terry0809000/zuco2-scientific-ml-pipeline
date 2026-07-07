@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: If you use this pipeline, please cite the repository and the original ZuCo data source.
+title: ZuCo 2.0 Scientific ML Pipeline
+authors:
+  - family-names: Yu
+    given-names: Tianyi
+repository-code: https://github.com/terry0809000/zuco2-scientific-ml-pipeline
+license: MIT
+version: 0.1.0
+date-released: 2026-07-08
+keywords:
+  - ZuCo
+  - eye tracking
+  - EEG
+  - reading
+  - cognitive processing
+  - machine learning
+  - grouped validation
+  - reproducibility

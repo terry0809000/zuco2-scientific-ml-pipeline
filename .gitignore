@@ -1,0 +1,36 @@
+# Local data and generated outputs
+/data/*
+!/data/README.md
+/outputs/*
+!/outputs/.gitkeep
+*.mat
+*.h5
+*.hdf5
+*.csv
+*.tsv
+*.parquet
+*.pkl
+*.joblib
+*.pickle
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.zip
+*.tar
+*.gz
+
+# Python and notebooks
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
