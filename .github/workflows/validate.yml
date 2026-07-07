@@ -15,28 +15,27 @@ jobs:
       - name: Install validation dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install nbformat pyyaml
-      - name: Validate notebook and metadata
+          pip install -e ".[dev]"
+      - name: Validate configuration files
         run: |
           python - <<'PY'
-          import json
-          import nbformat
           import yaml
-          from nbformat.validator import validate
 
-          notebook = nbformat.read("notebooks/01_zuco2_scientific_ml_pipeline.ipynb", as_version=4)
-          validate(notebook)
-
-          with open("environment.yml", "r", encoding="utf-8") as handle:
-              yaml.safe_load(handle)
+          for path in ["configs/default.yaml", "environment.yml"]:
+              with open(path, "r", encoding="utf-8") as handle:
+                  yaml.safe_load(handle)
           PY
-      - name: Regenerate extracted script
-        run: |
-          python scripts/extract_notebook_code.py
-          git diff --exit-code scripts/zuco2_pipeline.py
       - name: Syntax-check scripts
         run: |
-          python -m py_compile scripts/extract_notebook_code.py scripts/zuco2_pipeline.py
+          python -m py_compile src/zuco2_pipeline/*.py scripts/run_pipeline.py
+      - name: Run tests
+        run: |
+          pytest -q
+      - name: Exercise CLI
+        run: |
+          zuco2-pipeline --help
+          zuco2-pipeline init-config "$RUNNER_TEMP/config.yaml"
+          zuco2-pipeline discover --data-dir data
       - name: Check forbidden tracked artifacts
         run: |
           ! git ls-files | grep -E '(^|/)(data|outputs)/.*\.(mat|h5|hdf5|csv|tsv|parquet|pkl|joblib|pickle|png|jpg|jpeg|pdf|zip|tar|gz)$|\.mat$|\.h5$|\.hdf5$'

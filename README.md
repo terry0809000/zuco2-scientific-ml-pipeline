@@ -1,32 +1,58 @@
 # ZuCo 2.0 Scientific ML Pipeline
 
-Notebook-first scientific machine-learning pipeline for ZuCo 2.0 word-level eye-tracking experiments.
+Runnable Python package for word-level ZuCo 2.0 eye-tracking analysis.
 
-The pipeline extracts word-level eye-tracking variables from ZuCo MATLAB/HDF5 `.mat` files, engineers lexical and early-fixation features, evaluates leakage-aware grouped machine-learning models, and reports statistical robustness diagnostics for predicting late word-level processing load.
+The project extracts ZuCo MATLAB/HDF5 `.mat` files, builds lexical and early-fixation features, and evaluates grouped machine-learning baselines for predicting high late word-level processing load. The repository is organized as reusable research software rather than as a single embedded notebook.
 
 ## Repository Contents
 
 ```text
-notebooks/   Authoritative executable notebook
-scripts/     Auto-extracted Python audit script and extraction helper
-docs/        Data access and pipeline notes
-data/        Local data mount point, ignored except documentation
-outputs/     Generated outputs, ignored except placeholder
+configs/     YAML configuration files
+src/         installable zuco2_pipeline Python package
+scripts/     small command-line compatibility wrappers
+tests/       package and configuration tests
+docs/        data access and method notes
+data/        local data mount point, ignored except documentation
+outputs/     generated outputs, ignored except placeholder
 ```
 
-## Main Workflow
+## Quick Start
 
-Open the notebook:
+Create an environment and install the package:
 
 ```bash
-jupyter notebook notebooks/01_zuco2_scientific_ml_pipeline.ipynb
+python -m venv .venv
+.venv\Scripts\activate
+pip install -e .[dev]
 ```
 
-The notebook is designed for Google Colab first, with ZuCo files stored under:
+For macOS or Linux, activate with `source .venv/bin/activate`.
 
-```text
-/content/drive/MyDrive/ZuCo/
+Inspect available commands:
+
+```bash
+zuco2-pipeline --help
 ```
+
+Discover local ZuCo files:
+
+```bash
+zuco2-pipeline discover --data-dir data
+```
+
+Run the configured pipeline:
+
+```bash
+zuco2-pipeline run --config configs/default.yaml
+```
+
+The compatibility wrapper below calls the same package entry point:
+
+```bash
+python scripts/run_pipeline.py --config configs/default.yaml
+```
+
+## Input Data
 
 Expected input files follow the ZuCo naming pattern:
 
@@ -35,49 +61,36 @@ resultsYAC_NR.mat
 resultsYAC_TSR.mat
 ```
 
-The default configuration loads multiple subjects and both normal reading (`NR`) and task-specific reading (`TSR`) when files are available.
+Place local files under `data/` or update `data_dir` in `configs/default.yaml`. The default configuration targets multiple subjects and both normal reading (`NR`) and task-specific reading (`TSR`) when matching files are available.
+
+ZuCo `.mat` files are not redistributed in this repository. Raw data, extracted tables, model outputs, figures, and other generated artifacts are ignored by git. See [docs/DATA.md](docs/DATA.md) for data-access notes.
 
 ## Scientific Scope
 
-The central B-series question is:
+Primary question:
 
-> Do FFD-based early fixation signals robustly improve prediction of high late processing load beyond lexical/contextual features?
+> Do first-fixation duration features improve prediction of high late word-level processing load beyond lexical and contextual predictors?
 
-The pipeline includes:
+The runnable pipeline provides:
 
-- ZuCo MATLAB/HDF5 extraction helpers;
-- missingness, skipped-word, leakage, and data-quality audits;
-- grouped train/validation/test splitting;
-- validation-only hyperparameter and threshold tuning;
-- lexical baseline, additive FFD, moderated FFD, and nonlinear FFD model comparisons;
-- McNemar tests, paired grouped bootstrap, cross-validation, calibration/error analysis, and feature interpretation;
-- optional NR-versus-TSR and subject-held-out analyses.
-
-## Setup
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate  # Windows
-pip install -r requirements.txt
-```
-
-For macOS/Linux:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-## Data Policy
-
-ZuCo `.mat` files are not redistributed in this repository. Place local data under `data/` or a private Google Drive folder. Generated CSV outputs, figures, extracted data, and raw `.mat` files are ignored by git.
-
-See [docs/DATA.md](docs/DATA.md) for expected layout and data-access notes.
+- MATLAB/HDF5 extraction for word-level eye-tracking variables;
+- lexical, positional, task, and first-fixation feature engineering;
+- grouped train/validation/test splitting to reduce sentence-level leakage;
+- validation-only model and threshold selection;
+- B-series model comparisons from dummy and lexical baselines through additive, moderated, and nonlinear first-fixation models;
+- reproducibility outputs including file indices, model-ready tables, prediction files, metrics, and a JSON manifest.
 
 ## Validation
 
-This repository includes a lightweight GitHub Actions workflow that validates notebook JSON, extracts code cells, syntax-checks the generated pipeline script, and checks that raw data/model output artifacts are not tracked.
+The GitHub Actions workflow installs the package, validates YAML configuration, syntax-checks source files, runs the test suite, exercises the CLI, and confirms that restricted data or generated artifacts are not tracked.
+
+Run the same checks locally with:
+
+```bash
+pip install -e .[dev]
+pytest -q
+python -m py_compile src/zuco2_pipeline/*.py scripts/run_pipeline.py
+```
 
 ## License
 

@@ -13,5 +13,5 @@ dependencies:
   - pyyaml
   - pip
   - pip:
-      - nbformat>=5.9
-      - jupyter>=1.0
+      - -e .
+      - pytest>=7.4

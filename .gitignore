@@ -20,10 +20,14 @@
 *.tar
 *.gz
 
-# Python and notebooks
+# Python
 __pycache__/
 *.py[cod]
 .pytest_cache/
+*.egg-info/
+.eggs/
+build/
+dist/
 .ipynb_checkpoints/
 .venv/
 venv/
